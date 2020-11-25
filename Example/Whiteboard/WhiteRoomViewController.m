@@ -129,6 +129,12 @@
     }];
 }
 
+- (void)changeFrameGesture:(UIPanGestureRecognizer *)gesture
+{
+    [super changeFrameGesture:gesture];
+    [self.room refreshViewSize];
+}
+
 /**
  已有 room uuid，加入房间
  1. 与服务器通信，获取该房间的 room token
@@ -173,9 +179,13 @@
             [self.room addMagixEventListener:WhiteCommandCustomEvent];
             [self setupShareBarItem];
             
+            self.room.backgroundColor = [UIColor redColor];
+            self.boardView.opaque = NO;
+            
             if (self.roomBlock) {
                 self.roomBlock(self.room, nil);
             }
+            [self.room scalePptToFit:WhiteAnimationModeImmediately];
         } else if (self.roomBlock) {
             self.roomBlock(nil, error);
         } else {

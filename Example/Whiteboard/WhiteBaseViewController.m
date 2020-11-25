@@ -66,7 +66,7 @@ static NSString *kPPTScheme = @"netless";
         self.schemeHandler = [[NETURLSchemeHandler alloc] initWithScheme:kPPTScheme directory:NSTemporaryDirectory()];
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
         [config setURLSchemeHandler:self.schemeHandler forURLScheme:kPPTScheme];
-        self.boardView = [[WhiteBoardView alloc] initWithFrame:CGRectZero configuration:config];
+        self.boardView = [[WhiteBoardView alloc] initWithFrame:CGRectMake(0, 100, 300, 500) configuration:config];
     } else {
         self.boardView = [[WhiteBoardView alloc] init];
     }
@@ -82,13 +82,22 @@ static NSString *kPPTScheme = @"netless";
         //可以参考此处处理
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
-    
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(changeFrameGesture:)];
+    [self.view addGestureRecognizer:panGesture];
     // 3. 使用 Masonry 进行 Autolayout 处理
-    [self.boardView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_topLayoutGuideBottom);
-        make.left.bottom.right.equalTo(self.view);
-    }];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeFrame) name:@"changeframe" object:nil];
+//    [self.boardView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.mas_topLayoutGuideBottom);
+//        make.left.bottom.right.equalTo(self.view);
+//    }];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeFrame) name:@"changeframe" object:nil];
+}
+
+- (void)changeFrameGesture:(UIPanGestureRecognizer *)gesture
+{
+    CGPoint point = [gesture locationInView:self.view];
+    NSLog(@"x: %f, y:%f", point.x, point.y);
+    self.boardView.frame = CGRectMake(0, point.y + 5, point.x - 5, self.view.bounds.size.height - point.y - 5);
+    
 }
 
 - (void)changeFrame

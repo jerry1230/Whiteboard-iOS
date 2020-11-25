@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) id<WhiteCommonCallbackDelegate> commonDelegate;
 
 - (void)showPopoverViewController:(UIViewController *)vc sourceView:(id)sourceView;
+- (void)changeFrameGesture:(UIPanGestureRecognizer *)gesture;
 
 @end
 
